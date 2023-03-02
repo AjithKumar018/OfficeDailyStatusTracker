@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OfficeDailyStatusTracker.Common\OfficeDailyStatusTracker.Common.csproj" />
+    <ProjectReference Include="..\OfficeDailyStatusTracker.Data\OfficeDailyStatusTracker.Data.csproj" />
+  </ItemGroup>
+
 </Project>

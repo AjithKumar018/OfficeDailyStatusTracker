@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\OfficeDailyStatusTracker.Common\OfficeDailyStatusTracker.Common.csproj" />
+    <ProjectReference Include="..\OfficeDailyStatusTracker.Logic\OfficeDailyStatusTracker.Logic.csproj" />
   </ItemGroup>
 
 </Project>
