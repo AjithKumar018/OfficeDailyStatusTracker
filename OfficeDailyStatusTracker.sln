@@ -5,15 +5,15 @@ VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeDailyStatusTracker.Common", "OfficeDailyStatusTracker.Common\OfficeDailyStatusTracker.Common.csproj", "{011FBB12-9A38-4028-A8B4-BDC34E28100E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeDailyStatusTracker.Data", "OfficeDailyStatusTracker.Data\OfficeDailyStatusTracker.Data.csproj", "{60498239-76F2-4E21-A062-CD4000CD9FE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeDailyStatusTracker.Data", "OfficeDailyStatusTracker.Data\OfficeDailyStatusTracker.Data.csproj", "{60498239-76F2-4E21-A062-CD4000CD9FE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeDailyStatusTracker.Logic", "OfficeDailyStatusTracker.Logic\OfficeDailyStatusTracker.Logic.csproj", "{9AF00AAA-F59B-41AE-8C32-DF3EADFF1718}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeDailyStatusTracker.Logic", "OfficeDailyStatusTracker.Logic\OfficeDailyStatusTracker.Logic.csproj", "{9AF00AAA-F59B-41AE-8C32-DF3EADFF1718}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeDailyStatusTracker.Web", "OfficeDailyStatusTracker.Web\OfficeDailyStatusTracker.Web.csproj", "{270088EF-219E-45C7-8AD0-55833D7228C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeDailyStatusTracker.Web", "OfficeDailyStatusTracker.Web\OfficeDailyStatusTracker.Web.csproj", "{270088EF-219E-45C7-8AD0-55833D7228C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeDailyStatusTracker.Test", "OfficeDailyStatusTracker.Test\OfficeDailyStatusTracker.Test.csproj", "{12C101F5-D622-458F-90F5-5D5B4587BB0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeDailyStatusTracker.Test", "OfficeDailyStatusTracker.Test\OfficeDailyStatusTracker.Test.csproj", "{12C101F5-D622-458F-90F5-5D5B4587BB0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeDailyStatusTracker.Api", "OfficeDailyStatusTracker.Api\OfficeDailyStatusTracker.Api.csproj", "{E9471C26-0AEF-4B9A-8EFC-F0523EB87643}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeDailyStatusTracker.Api", "OfficeDailyStatusTracker.Api\OfficeDailyStatusTracker.Api.csproj", "{E9471C26-0AEF-4B9A-8EFC-F0523EB87643}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
