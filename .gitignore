@@ -5,3 +5,6 @@
 **/.vs
 **/obj
 **/bin
+**/.config
+**/PublishProfiles
+/OfficeDailyStatusTracker.Web/OfficeDailyStatusTracker.Web.csproj.user
