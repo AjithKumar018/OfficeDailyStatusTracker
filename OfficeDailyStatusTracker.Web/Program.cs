@@ -7,7 +7,7 @@ builder.Services.AddScoped<IStatusTrackerService, StatusTrackerService>();
 
 builder.Services.AddHttpClient<IStatusTrackerService, StatusTrackerService>(client =>
                                                                             {
-                                                                                client.BaseAddress = new Uri("https://localhost:7282/");
+                                                                                client.BaseAddress = new Uri(builder.Configuration.GetConnectionString("ApiBaseURL"));
                                                                             });
 
 builder.Services.AddRazorPages();
