@@ -1,181 +1,185 @@
-﻿@page "/statustracker"
+﻿@page "/"
+@page "/statustracker"
 @inherits StatusTrackerBase
 
-<PageTitle>Status Tracker</PageTitle>
+@if(IsAdminLoggedIn)
+{
+    <PageTitle>Status Tracker</PageTitle>
 
-<div class="statusTrackerContainer">
-    <div class="statusTrackerHeader row w-100 d-flex justify-content-end">
-        <input type="button" class="btn btn-primary" value="Add Daily Status" @onclick="ToggleAddPopup" />
-    </div>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">S.Nr</th>
-            <th scope="col">Date</th>
-            <th scope="col">Name</th>
-            <th scope="col">Project</th>
-            <th scope="col">Task</th>
-            <th scope="col">Description</th>
-            <th scope="col">Actual Time</th>
-            <th scope="col">Category</th>
-            <th class="text-center" scope="col">Edit</th>
-            <th class="text-center" scope="col">Delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        @if(DailyStatusList == null)
-        {
-            <tr>Loading</tr>
-        }
-        else
-        {
-            @foreach(var dailyStatus in DailyStatusList)
+    <div class="statusTrackerContainer">
+        <div class="statusTrackerHeader row w-100 d-flex justify-content-end">
+            <input type="button" class="btn btn-primary" value="Add Daily Status" @onclick="ToggleAddPopup"/>
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">S.Nr</th>
+                <th scope="col">Date</th>
+                <th scope="col">Name</th>
+                <th scope="col">Project</th>
+                <th scope="col">Task</th>
+                <th scope="col">Description</th>
+                <th scope="col">Actual Time</th>
+                <th scope="col">Category</th>
+                <th class="text-center" scope="col">Edit</th>
+                <th class="text-center" scope="col">Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if(DailyStatusList == null)
             {
-                <tr>
-                    <th scope="row">@dailyStatus.Id</th>
-                    <td>@dailyStatus.Date</td>
-                    <td>@dailyStatus.Name</td>
-                    <td>@dailyStatus.Project</td>
-                    <td>@dailyStatus.Task</td>
-                    <td>@dailyStatus.Description</td>
-                    <td>@dailyStatus.ActualTime</td>
-                    <td>@dailyStatus.Category</td>
-                    <td class="text-center"><i class="fas fa-edit" @onclick="() => UpdateDailyStatusClicked(dailyStatus)"></i></td>
-                    <td class="text-center"><i class="fas fa-trash" @onclick="() => DeleteDailyStatusClicked(dailyStatus)"></i></td>
-                </tr>
+                <tr>Loading</tr>
             }
-        }
-        </tbody>
-    </table>
-</div>
+            else
+            {
+                @foreach(var dailyStatus in DailyStatusList)
+                {
+                    <tr>
+                        <th scope="row">@dailyStatus.Id</th>
+                        <td>@dailyStatus.Date</td>
+                        <td>@dailyStatus.Name</td>
+                        <td>@dailyStatus.Project</td>
+                        <td>@dailyStatus.Task</td>
+                        <td>@dailyStatus.Description</td>
+                        <td>@dailyStatus.ActualTime</td>
+                        <td>@dailyStatus.Category</td>
+                        <td class="text-center"><i class="fas fa-edit" @onclick="() => UpdateDailyStatusClicked(dailyStatus)"></i></td>
+                        <td class="text-center"><i class="fas fa-trash" @onclick="() => DeleteDailyStatusClicked(dailyStatus)"></i></td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
 
-@if(bShowAddPopup)
-{
-    <div class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Add Daily Status</h5>
-                <span class="close" @onclick="ToggleAddPopup">&times;</span>
-            </div>
-            <div class="modal-body">
-                <EditForm Model="@DailyStatusToAdd" OnValidSubmit="AddDailyStatus" class="row g-3">
-                    <DataAnnotationsValidator />
-                    <div class="col-md-6">
-                        <label for="inputDate" class="form-label">Date</label>
-                        <InputText type="date" class="form-control" id="inputDate" @bind-Value="DailyStatusToAdd!.Date"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToAdd!.Date)" />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="inputName" class="form-label">Name</label>
-                        <InputText type="text" class="form-control" id="inputName" @bind-Value="DailyStatusToAdd!.Name"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToAdd!.Name)" />
-                    </div>
-                    <div class="col-12">
-                        <label for="inputProject" class="form-label">Project</label>
-                        <InputText type="text" class="form-control" id="inputProject"  @bind-Value="DailyStatusToAdd!.Project"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToAdd!.Project)" />
-                    </div>
-                    <div class="col-12">
-                        <label for="inputTask" class="form-label">Task</label>
-                        <InputText type="text" class="form-control" id="inputTask" @bind-Value="DailyStatusToAdd!.Task"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToAdd!.Task)" />
-                    </div>
-                    <div class="col-12">
-                        <label for="inputDescription" class="form-label">Description</label>
-                        <InputText type="text" class="form-control" id="inputDescription" @bind-Value="DailyStatusToAdd!.Description"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToAdd!.Description)" />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="inputActualTime" class="form-label">Actual Time</label>
-                        <InputText type="text" class="form-control" id="inputActualTime" @bind-Value="DailyStatusToAdd!.ActualTime"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToAdd!.ActualTime)" />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="inputCategory" class="form-label">Category</label>
-                        <InputText type="text" class="form-control" id="inputCategory" @bind-Value="DailyStatusToAdd!.Category"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToAdd!.Category)" />
-                    </div>
-                </EditForm>
-            </div>
-            <div class="modal-footer">
-                <input type="button" class="btn btn-primary" value="Add" @onclick="AddDailyStatus" />
-                <input type="button" class="btn btn-primary" value="Cancel" @onclick="ToggleAddPopup" />
+    @if(bShowAddPopup)
+    {
+        <div class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Add Daily Status</h5>
+                    <span class="close" @onclick="ToggleAddPopup">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@DailyStatusToAdd" OnValidSubmit="AddDailyStatus" class="row g-3">
+                        <DataAnnotationsValidator/>
+                        <div class="col-md-6">
+                            <label for="inputDate" class="form-label">Date</label>
+                            <InputText type="date" class="form-control" id="inputDate" @bind-Value="DailyStatusToAdd!.Date"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToAdd!.Date)"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputName" class="form-label">Name</label>
+                            <InputText type="text" class="form-control" id="inputName" @bind-Value="DailyStatusToAdd!.Name"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToAdd!.Name)"/>
+                        </div>
+                        <div class="col-12">
+                            <label for="inputProject" class="form-label">Project</label>
+                            <InputText type="text" class="form-control" id="inputProject" @bind-Value="DailyStatusToAdd!.Project"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToAdd!.Project)"/>
+                        </div>
+                        <div class="col-12">
+                            <label for="inputTask" class="form-label">Task</label>
+                            <InputText type="text" class="form-control" id="inputTask" @bind-Value="DailyStatusToAdd!.Task"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToAdd!.Task)"/>
+                        </div>
+                        <div class="col-12">
+                            <label for="inputDescription" class="form-label">Description</label>
+                            <InputText type="text" class="form-control" id="inputDescription" @bind-Value="DailyStatusToAdd!.Description"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToAdd!.Description)"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputActualTime" class="form-label">Actual Time</label>
+                            <InputText type="text" class="form-control" id="inputActualTime" @bind-Value="DailyStatusToAdd!.ActualTime"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToAdd!.ActualTime)"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputCategory" class="form-label">Category</label>
+                            <InputText type="text" class="form-control" id="inputCategory" @bind-Value="DailyStatusToAdd!.Category"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToAdd!.Category)"/>
+                        </div>
+                    </EditForm>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" value="Add" @onclick="AddDailyStatus"/>
+                    <input type="button" class="btn btn-primary" value="Cancel" @onclick="ToggleAddPopup"/>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
 
-@if(bShowUpdatePopup)
-{
-    <div class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Update Daily Status</h5>
-                <span class="close" @onclick="ToggleUpdatePopup">&times;</span>
-            </div>
-            <div class="modal-body">
-                <EditForm Model="@DailyStatusToUpdate" OnValidSubmit="UpdateDailyStatus" class="row g-3">
-                    <DataAnnotationsValidator />
-                    <div class="col-md-6">
-                        <label for="inputDate" class="form-label">Date</label>
-                        <InputText type="date" class="form-control" id="inputDate" @bind-Value="DailyStatusToUpdate!.Date"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToUpdate!.Date)" />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="inputName" class="form-label">Name</label>
-                        <InputText type="text" class="form-control" id="inputName" @bind-Value="DailyStatusToUpdate!.Name"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToUpdate!.Name)" />
-                    </div>
-                    <div class="col-12">
-                        <label for="inputProject" class="form-label">Project</label>
-                        <InputText type="text" class="form-control" id="inputProject" @bind-Value="DailyStatusToUpdate!.Project"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToUpdate!.Project)" />
-                    </div>
-                    <div class="col-12">
-                        <label for="inputTask" class="form-label">Task</label>
-                        <InputText type="text" class="form-control" id="inputTask" @bind-Value="DailyStatusToUpdate!.Task"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToUpdate!.Task)" />
-                    </div>
-                    <div class="col-12">
-                        <label for="inputDescription" class="form-label">Description</label>
-                        <InputText type="text" class="form-control" id="inputDescription" @bind-Value="DailyStatusToUpdate!.Description"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToUpdate!.Description)" />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="inputActualTime" class="form-label">Actual Time</label>
-                        <InputText type="text" class="form-control" id="inputActualTime" @bind-Value="DailyStatusToUpdate!.ActualTime"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToUpdate!.ActualTime)" />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="inputCategory" class="form-label">Category</label>
-                        <InputText type="text" class="form-control" id="inputCategory" @bind-Value="DailyStatusToUpdate!.Category"></InputText>
-                        <ValidationMessage For="@(() => DailyStatusToUpdate!.Category)" />
-                    </div>
-                </EditForm>
-            </div>
-            <div class="modal-footer">
-                <input type="button" class="btn btn-primary" value="Update" @onclick="UpdateDailyStatus" />
-                <input type="button" class="btn btn-primary" value="Cancel" @onclick="ToggleUpdatePopup" />
+    @if(bShowUpdatePopup)
+    {
+        <div class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Update Daily Status</h5>
+                    <span class="close" @onclick="ToggleUpdatePopup">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@DailyStatusToUpdate" OnValidSubmit="UpdateDailyStatus" class="row g-3">
+                        <DataAnnotationsValidator/>
+                        <div class="col-md-6">
+                            <label for="inputDate" class="form-label">Date</label>
+                            <InputText type="date" class="form-control" id="inputDate" @bind-Value="DailyStatusToUpdate!.Date"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToUpdate!.Date)"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputName" class="form-label">Name</label>
+                            <InputText type="text" class="form-control" id="inputName" @bind-Value="DailyStatusToUpdate!.Name"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToUpdate!.Name)"/>
+                        </div>
+                        <div class="col-12">
+                            <label for="inputProject" class="form-label">Project</label>
+                            <InputText type="text" class="form-control" id="inputProject" @bind-Value="DailyStatusToUpdate!.Project"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToUpdate!.Project)"/>
+                        </div>
+                        <div class="col-12">
+                            <label for="inputTask" class="form-label">Task</label>
+                            <InputText type="text" class="form-control" id="inputTask" @bind-Value="DailyStatusToUpdate!.Task"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToUpdate!.Task)"/>
+                        </div>
+                        <div class="col-12">
+                            <label for="inputDescription" class="form-label">Description</label>
+                            <InputText type="text" class="form-control" id="inputDescription" @bind-Value="DailyStatusToUpdate!.Description"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToUpdate!.Description)"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputActualTime" class="form-label">Actual Time</label>
+                            <InputText type="text" class="form-control" id="inputActualTime" @bind-Value="DailyStatusToUpdate!.ActualTime"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToUpdate!.ActualTime)"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputCategory" class="form-label">Category</label>
+                            <InputText type="text" class="form-control" id="inputCategory" @bind-Value="DailyStatusToUpdate!.Category"></InputText>
+                            <ValidationMessage For="@(() => DailyStatusToUpdate!.Category)"/>
+                        </div>
+                    </EditForm>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" value="Update" @onclick="UpdateDailyStatus"/>
+                    <input type="button" class="btn btn-primary" value="Cancel" @onclick="ToggleUpdatePopup"/>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
 
-@if(bShowDeletePopup)
-{
-    <div class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Delete Category</h5>
-                <span class="close" @onclick="ToggleDeletePopup">&times;</span>
-            </div>
-            <div class="modal-body">
-                Are you sure want to DELETE <span style="background-color: yellow">@DailyStatusToDelete?.Project? - @DailyStatusToDelete?.Task?</span>
-            </div>
-            <div class="modal-footer">
-                <input type="button" class="btn btn-primary" value="Yes" @onclick="DeleteDailyStatus" />
-                <input type="button" class="btn btn-primary" value="No" @onclick="ToggleDeletePopup" />
+    @if(bShowDeletePopup)
+    {
+        <div class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Delete Category</h5>
+                    <span class="close" @onclick="ToggleDeletePopup">&times;</span>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to DELETE <span style="background-color: yellow">@DailyStatusToDelete?.Project? - @DailyStatusToDelete?.Task?</span>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" value="Yes" @onclick="DeleteDailyStatus"/>
+                    <input type="button" class="btn btn-primary" value="No" @onclick="ToggleDeletePopup"/>
+                </div>
             </div>
         </div>
-    </div>
+    }
 }

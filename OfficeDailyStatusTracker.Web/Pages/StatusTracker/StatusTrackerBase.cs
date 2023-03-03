@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using OfficeDailyStatusTracker.Common.Models;
 using OfficeDailyStatusTracker.Web.Services;
 
@@ -10,11 +11,21 @@ namespace OfficeDailyStatusTracker.Web.Pages
         public bool bShowAddPopup;
         public bool bShowUpdatePopup;
         public bool bShowDeletePopup;
+        public bool IsAdminLoggedIn;
         #endregion
 
         #region Properties
         [Inject]
         public IStatusTrackerService? StatusTrackerService { get; set; }
+
+        [CascadingParameter]
+        public EventCallback EventNotify { get; set; }
+
+        [Inject]
+        public NavigationManager? NavigationManager { get; set; }
+
+        [Inject]
+        public ProtectedSessionStorage? ProtectedSessionStorage { get; set; }
 
         public DailyStatusModel? DailyStatus { get; set; }
         public List<DailyStatusModel>? DailyStatusList { get; set; }
@@ -30,9 +41,29 @@ namespace OfficeDailyStatusTracker.Web.Pages
             await FetchAllRecords();
         }
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if(firstRender)
+            {
+                await this.EventNotify.InvokeAsync();
+
+                ProtectedBrowserStorageResult<string> strAdminSession = await this.ProtectedSessionStorage!.GetAsync<string>("adminKey");
+
+                if(strAdminSession.Success)
+                {
+                    IsAdminLoggedIn = true;
+                    StateHasChanged();
+                }
+                else
+                {
+                    this.NavigationManager!.NavigateTo("/login");
+                }
+            }
+        }
+
         protected async Task AddDailyStatus()
         {
-            ResponseModel response = await this.StatusTrackerService!.AddNewDailyStatus(this.DailyStatusToAdd!);
+            await this.StatusTrackerService!.AddNewDailyStatus(this.DailyStatusToAdd!);
             ToggleAddPopup();
 
             this.DailyStatusToAdd = new DailyStatusModel();
@@ -42,7 +73,7 @@ namespace OfficeDailyStatusTracker.Web.Pages
 
         protected async Task UpdateDailyStatus()
         {
-            ResponseModel response = await this.StatusTrackerService!.UpdateDailyStatus(this.DailyStatusToUpdate!);
+            await this.StatusTrackerService!.UpdateDailyStatus(this.DailyStatusToUpdate!);
             ToggleUpdatePopup();
 
             this.DailyStatusToUpdate = new DailyStatusModel();
@@ -52,7 +83,7 @@ namespace OfficeDailyStatusTracker.Web.Pages
 
         protected async Task DeleteDailyStatus()
         {
-            ResponseModel response = await this.StatusTrackerService!.DeleteDailyStatus(this.DailyStatusToDelete!.Id);
+            await this.StatusTrackerService!.DeleteDailyStatus(this.DailyStatusToDelete!.Id);
             ToggleDeletePopup();
 
             this.DailyStatusToDelete = new DailyStatusModel();
@@ -74,7 +105,7 @@ namespace OfficeDailyStatusTracker.Web.Pages
 
         protected void ToggleAddPopup()
         {
-            this.DailyStatusToAdd = new DailyStatusModel()
+            this.DailyStatusToAdd = new DailyStatusModel
                                     {
                                         Date = DateTime.Now.ToString("yyyy-MM-dd"),
                                         Name = "Mani Raj"
