@@ -21,17 +21,17 @@ public partial class OfficeStatusTrackerContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
         // #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        // => optionsBuilder.UseSqlServer("Data Source=MS-NB0101;Initial Catalog=OfficeStatusTracker;Integrated Security=True;User ID=Mani;Password=Mani#MS;TrustServerCertificate=true;");
+        // => optionsBuilder.UseSqlServer("Server=MS-NB0101;Database=OfficeStatusTracker;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<DailyStatus>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__DailySta__3214EC074F095857");
+            entity.HasKey(e => e.DailyStatusId).HasName("PK_DailyStatusId");
 
             entity.ToTable("DailyStatus");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DailyStatusId).ValueGeneratedNever();
             entity.Property(e => e.ActualTime)
                 .HasMaxLength(15)
                 .IsUnicode(false);
@@ -53,15 +53,19 @@ public partial class OfficeStatusTrackerContext : DbContext
             entity.Property(e => e.Task)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.User).WithMany(p => p.DailyStatuses)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserId");
         });
 
         modelBuilder.Entity<UserProfile>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.UserId);
 
             entity.Property(e => e.CreatedOn).HasMaxLength(30);
             entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.LastLogin).HasMaxLength(30);
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.Password).HasMaxLength(30);

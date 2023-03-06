@@ -2,7 +2,8 @@
 {
     public class DailyStatusModel
     {
-        public int Id { get; set; }
+        public int DailyStatusId { get; set; }
+        public int UserId { get; set; }
         public string? Date { get; set; }
         public string? Name { get; set; }
         public string? Project { get; set; }

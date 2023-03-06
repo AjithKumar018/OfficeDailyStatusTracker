@@ -5,7 +5,7 @@ namespace OfficeDailyStatusTracker.Data.Tables;
 
 public partial class UserProfile
 {
-    public int Id { get; set; }
+    public int UserId { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -18,4 +18,6 @@ public partial class UserProfile
     public string? CreatedOn { get; set; }
 
     public string? UpdatedOn { get; set; }
+
+    public virtual ICollection<DailyStatus> DailyStatuses { get; } = new List<DailyStatus>();
 }

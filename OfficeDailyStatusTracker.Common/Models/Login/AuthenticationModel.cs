@@ -2,7 +2,7 @@
 
 namespace OfficeDailyStatusTracker.Common.Models
 {
-    public class LoginModel
+    public class AuthenticationModel
     {
         #region Properties
         public string? UserKey { get; set; }
