@@ -21,10 +21,10 @@ namespace OfficeDailyStatusTracker.Api
 
         #region Publics
         [HttpGet]
-        [Route("GetAllRecords")]
-        public IActionResult GetAllRecords()
+        [Route("GetAllRecords/{nAdminKey}")]
+        public IActionResult GetAllRecords(int nAdminKey)
         {
-            var result = statusTracker.GetAllRecords();
+            var result = statusTracker.GetAllRecords(nAdminKey);
 
             return Ok(result);
         }
