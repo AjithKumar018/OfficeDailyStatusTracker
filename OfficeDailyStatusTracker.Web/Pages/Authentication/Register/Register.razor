@@ -1,0 +1,87 @@
+﻿@page "/register"
+@inherits RegisterBase;
+
+<style>
+    .loginBox {
+        font-family: 'Open Sans', sans-serif;
+        margin: 0 auto 0 auto;
+        width: 100%;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    p {
+        font-size: 12px;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        color: #525252;
+        margin-bottom: 20px;
+    }
+
+    .box {
+        background: white;
+        width: 300px;
+        border-radius: 6px;
+        margin: 0 auto;
+        padding: 0 0 10px 0;
+        border: #2877e9 4px solid;
+    }
+
+    .textInput {
+        background: #fff;
+        border: #ccc 1px solid;
+        border-bottom: #ccc 2px solid;
+        padding: 8px;
+        width: 250px;
+        color: #525252;
+        font-size: 1em;
+        border-radius: 4px;
+    }
+
+    .password {
+        border-radius: 4px;
+        background: #ecf0f1;
+        border: #ccc 1px solid;
+        padding: 8px;
+        width: 250px;
+        font-size: 1em;
+        margin-bottom: 15px !important;
+    }
+</style>
+
+
+<div style="min-height: 400px;">
+    <div class="loginBox">
+        <div class="box">
+            <br />
+            <h1>User Register</h1>
+
+            @if(AuthenticationModel != null)
+            {
+                <EditForm Model="@AuthenticationModel" OnValidSubmit="RegisterUserAsync">
+                    <DataAnnotationsValidator />
+
+                    <InputText type="text" name="username" class="textInput mb-2" placeholder="User Name" @bind-Value="AuthenticationModel.UserName" autocomplete="off" />
+                    <ValidationMessage class="mb-3" For="@(() => AuthenticationModel.Email)" />
+
+                    <InputText type="email" name="email" class="textInput mb-2" placeholder="Email" @bind-Value="AuthenticationModel.Email" autocomplete="off" />
+                    <ValidationMessage class="mb-3" For="@(() => AuthenticationModel.Email)" />
+
+                    <InputText type="password" name="password" class="password mb-2" placeholder="Password" @bind-Value="AuthenticationModel.Password" />
+                    <ValidationMessage class="mb-3" For="@(() => AuthenticationModel.Password)" />
+
+                    <input type="submit" class="btn-primary" value="Register" />
+                </EditForm>
+            }
+        </div>
+        <div>
+            <p style="color: #e52e50">
+                <h4>@AlertMessage</h4>
+            </p>
+        </div>
+    </div>
+</div>

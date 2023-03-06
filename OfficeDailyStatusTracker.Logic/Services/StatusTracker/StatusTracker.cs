@@ -17,13 +17,13 @@ namespace OfficeDailyStatusTracker.Logic.Services
         #endregion
 
         #region Publics
-        public List<DailyStatusModel> GetAllRecords()
+        public List<DailyStatusModel> GetAllRecords(int nAdminKey)
         {
-            List<DailyStatus> lstDailyStatus = _context.DailyStatuses.ToList();
+            List<DailyStatus> lstDailyStatus = _context.DailyStatuses.Where(dailyStatus => dailyStatus.UserId == nAdminKey).ToList();
 
             return lstDailyStatus.Select(dailyStatus => new DailyStatusModel()
                                                         {
-                                                            Id = dailyStatus.Id,
+                                                            DailyStatusId = dailyStatus.DailyStatusId,
                                                             Date = dailyStatus.Date,
                                                             Name = dailyStatus.Name,
                                                             Project = dailyStatus.Project,
@@ -42,7 +42,8 @@ namespace OfficeDailyStatusTracker.Logic.Services
             {
                 var dailyStatusNeedToAdd = new DailyStatus()
                                            {
-                                               Id = _context.DailyStatuses.ToList().Count + 1,
+                                               UserId = dailyStatus.UserId,
+                                               DailyStatusId = _context.DailyStatuses.ToList().Count + 1,
                                                Date = dailyStatus.Date,
                                                Name = dailyStatus.Name,
                                                Project = dailyStatus.Project,
@@ -78,7 +79,7 @@ namespace OfficeDailyStatusTracker.Logic.Services
 
             try
             {
-                DailyStatus? dailyStatusNeedToUpdate = _context.DailyStatuses.FirstOrDefault(d => d.Id == dailyStatus.Id);
+                DailyStatus? dailyStatusNeedToUpdate = _context.DailyStatuses.FirstOrDefault(d => d.DailyStatusId == dailyStatus.DailyStatusId);
 
                 if(dailyStatusNeedToUpdate != null)
                 {
@@ -118,7 +119,7 @@ namespace OfficeDailyStatusTracker.Logic.Services
 
             try
             {
-                DailyStatus? dailyStatusNeedToDelete = _context.DailyStatuses.FirstOrDefault(d => d.Id == nId);
+                DailyStatus? dailyStatusNeedToDelete = _context.DailyStatuses.FirstOrDefault(d => d.DailyStatusId == nId);
 
                 if(dailyStatusNeedToDelete != null)
                 {

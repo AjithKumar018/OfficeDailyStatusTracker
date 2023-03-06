@@ -3,11 +3,11 @@ using OfficeDailyStatusTracker.Web.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IStatusTrackerService, StatusTrackerService>();
 
 
-builder.Services.AddHttpClient<ILoginService, LoginService>(client =>
+builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>(client =>
                                                             {
                                                                 client.BaseAddress = new Uri(builder.Configuration.GetConnectionString("ApiBaseURL"));
                                                             });

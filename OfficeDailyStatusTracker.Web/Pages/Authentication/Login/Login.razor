@@ -66,18 +66,19 @@
             <br/>
             <h1>User Login</h1>
 
-            @if(LoginModel != null)
+            @if(AuthenticationModel != null)
             {
-                <EditForm Model="@LoginModel" OnValidSubmit="CheckLogin">
+                <EditForm Model="@AuthenticationModel" OnValidSubmit="CheckLogin">
                     <DataAnnotationsValidator/>
 
-                    <InputText type="email" name="email" class="email mb-2" placeholder="Email" @bind-Value="LoginModel.Email" autocomplete="off"/>
-                    <ValidationMessage class="mb-3" For="@(() => LoginModel.Email)"/>
+                    <InputText type="email" name="email" class="email mb-2" placeholder="Email" @bind-Value="AuthenticationModel.Email" autocomplete="off" />
+                    <ValidationMessage class="mb-3" For="@(() => AuthenticationModel.Email)" />
 
-                    <InputText type="password" name="password" class="password mb-2" placeholder="Password" @bind-Value="LoginModel.Password" />
-                    <ValidationMessage class="mb-3" For="@(() => LoginModel.Password)" />
+                    <InputText type="password" name="password" class="password mb-2" placeholder="Password" @bind-Value="AuthenticationModel.Password" />
+                    <ValidationMessage class="mb-3" For="@(() => AuthenticationModel.Password)" />
 
                     <input type="submit" class="btn-primary" value="Login"/>
+                    <input type="button" class="btn-primary" value="Register" @onclick="NavigateToRegisterPage" />
                 </EditForm>
             }
         </div>

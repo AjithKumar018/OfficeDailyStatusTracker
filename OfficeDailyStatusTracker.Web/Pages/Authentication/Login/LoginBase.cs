@@ -8,11 +8,11 @@ namespace OfficeDailyStatusTracker.Web.Pages
     public class LoginBase : ComponentBase
     {
         #region Properties
-        public LoginModel? LoginModel { get; set; }
+        public AuthenticationModel? AuthenticationModel { get; set; }
         public string AlertMessage { get; set; } = null!;
 
         [Inject]
-        public ILoginService? LoginService { get; set; }
+        public IAuthenticationService? AuthenticationService { get; set; }
 
         [Inject]
         public NavigationManager? NavigationManager { get; set; }
@@ -27,14 +27,19 @@ namespace OfficeDailyStatusTracker.Web.Pages
         #region Protecteds
         protected override Task OnInitializedAsync()
         {
-            this.LoginModel = new LoginModel();
+            this.AuthenticationModel = new AuthenticationModel();
 
             return base.OnInitializedAsync();
         }
 
+        protected void NavigateToRegisterPage()
+        {
+            this.NavigationManager!.NavigateTo("/register");
+        }
+
         protected async Task CheckLogin()
         {
-            ResponseModel? response = await this.LoginService!.UserLogin(this.LoginModel);
+            ResponseModel? response = await this.AuthenticationService!.UserLogin(this.AuthenticationModel);
 
             if(response!.StatusCode == 200)
             {

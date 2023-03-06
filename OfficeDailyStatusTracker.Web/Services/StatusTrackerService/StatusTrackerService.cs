@@ -17,9 +17,9 @@ namespace OfficeDailyStatusTracker.Web.Services
         #endregion
 
         #region Publics
-        public async Task<List<DailyStatusModel>> GetAllRecords()
+        public async Task<List<DailyStatusModel>> GetAllRecords(int nAdminKey)
         {
-            return (await httpClient.GetFromJsonAsync<List<DailyStatusModel?>>("api/StatusTracker/GetAllRecords"))!;
+            return (await httpClient.GetFromJsonAsync<List<DailyStatusModel?>>($"api/StatusTracker/GetAllRecords/{nAdminKey}"))!;
         }
 
         public async Task<ResponseModel> AddNewDailyStatus(DailyStatusModel dailyStatus)

@@ -11,7 +11,7 @@ namespace OfficeDailyStatusTracker.Web.Pages
         public bool bShowAddPopup;
         public bool bShowUpdatePopup;
         public bool bShowDeletePopup;
-        public bool IsAdminLoggedIn;
+        public int nAdminKey = -1;
         #endregion
 
         #region Properties
@@ -43,26 +43,23 @@ namespace OfficeDailyStatusTracker.Web.Pages
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            var strAdminSession = await this.ProtectedSessionStorage!.GetAsync<string>("AdminKey");
+            nAdminKey = strAdminSession.Success && nAdminKey == -1 ? int.Parse(strAdminSession.Value!) : nAdminKey;
+
             if(firstRender)
             {
                 await this.EventNotify.InvokeAsync();
-
-                ProtectedBrowserStorageResult<string> strAdminSession = await this.ProtectedSessionStorage!.GetAsync<string>("adminKey");
-
-                if(strAdminSession.Success)
-                {
-                    IsAdminLoggedIn = true;
-                    StateHasChanged();
-                }
-                else
-                {
-                    this.NavigationManager!.NavigateTo("/login");
-                }
             }
+
+            await FetchAllRecords();
+
+            if(strAdminSession.Success) StateHasChanged();
+            else this.NavigationManager!.NavigateTo("/login");
         }
 
         protected async Task AddDailyStatus()
         {
+            this.DailyStatusToAdd!.UserId = nAdminKey;
             await this.StatusTrackerService!.AddNewDailyStatus(this.DailyStatusToAdd!);
             ToggleAddPopup();
 
@@ -73,6 +70,7 @@ namespace OfficeDailyStatusTracker.Web.Pages
 
         protected async Task UpdateDailyStatus()
         {
+            this.DailyStatusToUpdate!.UserId = nAdminKey;
             await this.StatusTrackerService!.UpdateDailyStatus(this.DailyStatusToUpdate!);
             ToggleUpdatePopup();
 
@@ -83,7 +81,8 @@ namespace OfficeDailyStatusTracker.Web.Pages
 
         protected async Task DeleteDailyStatus()
         {
-            await this.StatusTrackerService!.DeleteDailyStatus(this.DailyStatusToDelete!.Id);
+            this.DailyStatusToDelete!.UserId = nAdminKey;
+            await this.StatusTrackerService!.DeleteDailyStatus(this.DailyStatusToDelete!.DailyStatusId);
             ToggleDeletePopup();
 
             this.DailyStatusToDelete = new DailyStatusModel();
@@ -127,7 +126,7 @@ namespace OfficeDailyStatusTracker.Web.Pages
         #region Privates
         private async Task FetchAllRecords()
         {
-            this.DailyStatusList = await this.StatusTrackerService!.GetAllRecords();
+            this.DailyStatusList = await this.StatusTrackerService!.GetAllRecords(nAdminKey);
         }
         #endregion
     }

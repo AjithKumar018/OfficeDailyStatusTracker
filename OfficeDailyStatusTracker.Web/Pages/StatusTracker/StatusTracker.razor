@@ -2,7 +2,7 @@
 @page "/statustracker"
 @inherits StatusTrackerBase
 
-@if(IsAdminLoggedIn)
+@if(nAdminKey != -1)
 {
     <PageTitle>Status Tracker</PageTitle>
 
@@ -35,7 +35,7 @@
                 @foreach(var dailyStatus in DailyStatusList)
                 {
                     <tr>
-                        <th scope="row">@dailyStatus.Id</th>
+                        <th scope="row">@dailyStatus.DailyStatusId</th>
                         <td>@dailyStatus.Date</td>
                         <td>@dailyStatus.Name</td>
                         <td>@dailyStatus.Project</td>
