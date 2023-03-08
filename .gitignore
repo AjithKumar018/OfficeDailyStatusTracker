@@ -7,8 +7,3 @@
 **/bin
 **/.config
 **/PublishProfiles
-/OfficeDailyStatusTracker.Web/OfficeDailyStatusTracker.Web.csproj.user
-/OfficeDailyStatusTracker.Api/appsettings.json
-/OfficeDailyStatusTracker.Api/appsettings.json
-/OfficeDailyStatusTracker.Api/OfficeDailyStatusTracker.Api.csproj.user
-/OfficeDailyStatusTracker.Web/appsettings.json
