@@ -47,9 +47,13 @@ namespace OfficeDailyStatusTracker.Web.Pages
 
                 if(this.ProtectedSessionStorage != null)
                 {
-                    await this.ProtectedSessionStorage.SetAsync("AdminKey", userResponse[0]);
-                    await this.ProtectedSessionStorage.SetAsync("AdminName", userResponse[1]);
-                    await this.ProtectedSessionStorage.SetAsync("AdminEmail", userResponse[2]);
+                    AuthenticationModel userAuthenticationModel = new()
+                                                              {
+                                                                  UserKey = userResponse[0],
+                                                                  UserName = userResponse[1],
+                                                                  Email = userResponse[2]
+                                                              };
+                    await this.ProtectedSessionStorage.SetAsync("userAuthenticationModel", userAuthenticationModel);
                 }
 
                 await this.EventNotify.InvokeAsync();

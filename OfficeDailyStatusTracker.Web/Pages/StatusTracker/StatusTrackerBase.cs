@@ -11,15 +11,14 @@ namespace OfficeDailyStatusTracker.Web.Pages
         public bool bShowAddPopup;
         public bool bShowUpdatePopup;
         public bool bShowDeletePopup;
-        public int nAdminKey = -1;
         #endregion
 
         #region Properties
-        [Inject]
-        public IStatusTrackerService? StatusTrackerService { get; set; }
-
         [CascadingParameter]
         public EventCallback EventNotify { get; set; }
+
+        [Inject]
+        public IStatusTrackerService? StatusTrackerService { get; set; }
 
         [Inject]
         public NavigationManager? NavigationManager { get; set; }
@@ -27,6 +26,7 @@ namespace OfficeDailyStatusTracker.Web.Pages
         [Inject]
         public ProtectedSessionStorage? ProtectedSessionStorage { get; set; }
 
+        public AuthenticationModel? UserAuthenticationModel { get; set; }
         public DailyStatusModel? DailyStatus { get; set; }
         public List<DailyStatusModel>? DailyStatusList { get; set; }
         public DailyStatusModel? DailyStatusToAdd { get; set; }
@@ -43,8 +43,8 @@ namespace OfficeDailyStatusTracker.Web.Pages
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            var strAdminSession = await this.ProtectedSessionStorage!.GetAsync<string>("AdminKey");
-            nAdminKey = strAdminSession.Success && nAdminKey == -1 ? int.Parse(strAdminSession.Value!) : nAdminKey;
+            var userAuthenticationModel = await this.ProtectedSessionStorage!.GetAsync<AuthenticationModel>("userAuthenticationModel");
+            this.UserAuthenticationModel = userAuthenticationModel.Success && this.UserAuthenticationModel == null ? userAuthenticationModel.Value : this.UserAuthenticationModel;
 
             if(firstRender)
             {
@@ -53,13 +53,13 @@ namespace OfficeDailyStatusTracker.Web.Pages
 
             await FetchAllRecords();
 
-            if(strAdminSession.Success) StateHasChanged();
+            if(userAuthenticationModel.Success) StateHasChanged();
             else this.NavigationManager!.NavigateTo("/login");
         }
 
         protected async Task AddDailyStatus()
         {
-            this.DailyStatusToAdd!.UserId = nAdminKey;
+            this.DailyStatusToAdd!.UserId = int.Parse(this.UserAuthenticationModel?.UserKey!);
             await this.StatusTrackerService!.AddNewDailyStatus(this.DailyStatusToAdd!);
             ToggleAddPopup();
 
@@ -70,7 +70,7 @@ namespace OfficeDailyStatusTracker.Web.Pages
 
         protected async Task UpdateDailyStatus()
         {
-            this.DailyStatusToUpdate!.UserId = nAdminKey;
+            this.DailyStatusToUpdate!.UserId = int.Parse(this.UserAuthenticationModel?.UserKey!);
             await this.StatusTrackerService!.UpdateDailyStatus(this.DailyStatusToUpdate!);
             ToggleUpdatePopup();
 
@@ -81,7 +81,7 @@ namespace OfficeDailyStatusTracker.Web.Pages
 
         protected async Task DeleteDailyStatus()
         {
-            this.DailyStatusToDelete!.UserId = nAdminKey;
+            this.DailyStatusToDelete!.UserId = int.Parse(this.UserAuthenticationModel?.UserKey!);
             await this.StatusTrackerService!.DeleteDailyStatus(this.DailyStatusToDelete!.DailyStatusId);
             ToggleDeletePopup();
 
@@ -107,7 +107,7 @@ namespace OfficeDailyStatusTracker.Web.Pages
             this.DailyStatusToAdd = new DailyStatusModel
                                     {
                                         Date = DateTime.Now.ToString("yyyy-MM-dd"),
-                                        Name = "Mani Raj"
+                                        Name = this.UserAuthenticationModel?.UserName
                                     };
             bShowAddPopup = bShowAddPopup != true;
         }
@@ -126,7 +126,9 @@ namespace OfficeDailyStatusTracker.Web.Pages
         #region Privates
         private async Task FetchAllRecords()
         {
-            this.DailyStatusList = await this.StatusTrackerService!.GetAllRecords(nAdminKey);
+            if(this.UserAuthenticationModel == null) return;
+
+            this.DailyStatusList = await this.StatusTrackerService!.GetAllRecords(int.Parse(this.UserAuthenticationModel?.UserKey!));
         }
         #endregion
     }
